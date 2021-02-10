@@ -6,12 +6,12 @@ const todoSchema = new Schema({
   name: { type: String, required: true },
   description: { type: String },
   done: { type: Boolean, default: false },
-  dueDate: { type: Date, default: Date.now },
-  user: {
-    type: Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
-  },
+  dueDate: { type: Date, default: Date.now() },
+  // user: {
+  //   type: Schema.Types.ObjectId,
+  //   ref: 'User',
+  //   required: true
+  // },
   priority: { type: Boolean, default: false }
 }, {
   timestamps: true,

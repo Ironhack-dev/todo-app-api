@@ -1,5 +1,6 @@
 // TODO CRUD
 const express = require('express');
+const { restart } = require('nodemon');
 const Todo = require('../../models/Todo');
 const router = express.Router();
 
@@ -26,9 +27,9 @@ router.post('/', (req, res, next) => {
   const newTodo = new Todo({
     name,
     description,
-    dueDate: dueDate || Date.now,
+    dueDate: dueDate || Date.now(),
     priority,
-    user: req.user
+    // user: req.user
   })
 
   newTodo.save()
@@ -41,8 +42,11 @@ router.post('/', (req, res, next) => {
 router.put('/:id', (req, res, next) => {
   const { id } = req.params;
 
-  Todo.findOneAndUpdate({ id }, req.body, { new: true })
+  Todo.findOneAndUpdate({ _id: id }, req.body, { new: true })
   .then(todo => {
+    if(!todo) {
+      return res.status(404).json({ message: "Not found "})
+    }
     return res.status(200).json(todo);
   })
   .catch(err => res.status(500).json(err))
@@ -50,7 +54,7 @@ router.put('/:id', (req, res, next) => {
 
 router.delete('/:id', (req, res, next) => {
   const { id } = req.params;
-  Todo.findOneAndRemove({ id })
+  Todo.findOneAndRemove({ _id: id })
   .then(() => res.status(200).json({ message: `Todo ${id} deleted 🗑`}))
   .catch(err => res.status(500).json(err))
 })
