@@ -9,7 +9,7 @@ module.exports = session({
   saveUninitialized: false,
   cookie: {
     sameSite: 'none',
-    secure: process.env.SESSION_SECURE,
+    secure: true,
     httpOnly: true,
     maxAge: 60 * 60 * 24 * 7
     * 1000

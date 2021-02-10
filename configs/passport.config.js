@@ -8,7 +8,7 @@ passport.serializeUser((user, next) => {
 });
 
 passport.deserializeUser((id, next) => {
-  User.findById(id)
+  User.findOne({ _id: id })
     .then((user) => next(null, user))
     .catch(next);
 });
@@ -23,16 +23,14 @@ passport.use(
       User.findOne({ email })
         .then(user => {
           if (!user) {
-            next(null, false, { message: 'Usuario no registrado.' });
-            return;
+            return next(null, false, { message: 'Usuario no registrado.' });
           }
 
           if (!bcrypt.compareSync(password, user.password)) {
-            next(null, false, { message: 'Contraseña incorrecta.' });
-            return;
+            return next(null, false, { message: 'Usuario o contraseña incorrectos.' });
           }
 
-          next(null, user);
+          return next(null, user);
         })
         .catch(err => next(err))
     })
