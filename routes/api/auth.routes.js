@@ -76,7 +76,6 @@ router.post('/logout', (req, res) => {
 });
 
 router.get('/loggedin', (req, res) => {
-  console.log(req.user)
   if (req.isAuthenticated()) {
     return res.status(200).json(req.user);
   }
