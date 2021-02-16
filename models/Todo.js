@@ -7,11 +7,11 @@ const todoSchema = new Schema({
   description: { type: String },
   done: { type: Boolean, default: false },
   dueDate: { type: Date, default: Date.now() },
-  // user: {
-  //   type: Schema.Types.ObjectId,
-  //   ref: 'User',
-  //   required: true
-  // },
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
   priority: { type: Boolean, default: false }
 }, {
   timestamps: true,

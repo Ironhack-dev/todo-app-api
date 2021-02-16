@@ -34,7 +34,15 @@ router.post('/signup', (req, res) => {
       })
 
       newUser.save()
-        .then(user => res.status(200).json(user))
+        .then(() => {
+          req.login(newUser, (err) => {
+            if (err) {
+              return res.status(500).json({ message: 'Session save went bad.' });
+            }
+
+            return res.status(200).json(newUser);
+          })
+        })
         .catch(err => res.status(500).json(err))
 
     })
@@ -43,16 +51,16 @@ router.post('/signup', (req, res) => {
 
 router.post('/login', (req, res, next) => {
   passport.authenticate('local', (err, theUser, failureDetails) => {
-    if(err) {
+    if (err) {
       return res.status(500).json(err);
     }
 
-    if(!theUser) {
+    if (!theUser) {
       return res.status(401).json(failureDetails);
     }
 
     req.login(theUser, (err) => {
-      if(err){
+      if (err) {
         return res.status(500).json({ message: 'Session save went bad.' });
       }
 
@@ -64,14 +72,15 @@ router.post('/login', (req, res, next) => {
 router.post('/logout', (req, res) => {
   // req.logout is defined by passport
   req.logout();
-  return res.status(200).json({ message: 'Log out success!'})
+  return res.status(200).json({ message: 'Log out success!' })
 });
 
 router.get('/loggedin', (req, res) => {
-  if(req.isAuthenticated()){
+  console.log(req.user)
+  if (req.isAuthenticated()) {
     return res.status(200).json(req.user);
   }
-  return res.status(403).json({ message: 'Forbbiden'})
+  return res.status(403).json({ message: 'Forbbiden' })
 });
 
 module.exports = router;
